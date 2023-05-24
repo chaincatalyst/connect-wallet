@@ -18,7 +18,6 @@ The contract is initialized with three arrays buffs, NFT addresses, and NFT tier
 - ```mul```: The multiplier for the buff. This is used to determine the buff and multiplier.
 - ```buff```: The buff value. This is used to determine the buff and multiplier.
 
-
 ```solidity
    struct Tier {
 	uint8 tier;
