@@ -2,6 +2,7 @@
 pragma solidity ^0.8.0;
 
 import { IERC721 } from "./interfaces/IERC721.sol";
+import "forge-std/console.sol";
 
 contract BufferRandomizer {
 
@@ -10,8 +11,6 @@ contract BufferRandomizer {
 	error InvalidBaseValue();
 	error InvalidTier();
 	error InvalidWeights();
-
-	int256 public constant SCALING_FACTOR = 10**12;
 
 	address private owner;
 	int16[] private availableBuffs;
@@ -52,7 +51,8 @@ contract BufferRandomizer {
 		if(availableBuffs.length == 0) revert InvalidWeights();
 
 		int16 randomWeight = nftAddress == address(0) ? _getRandomWeight() : _getRandomWeightWithNFTBuffer(nftAddress, nftId);
-		adjustedValue = (baseValue * int256(randomWeight) * SCALING_FACTOR) / 100;
+		// 100 because we are working with percentages
+		adjustedValue = baseValue + (baseValue * int256(randomWeight) / 100);
 	}
 
 	function addBuff(int16 buff) public onlyOwner {
@@ -86,6 +86,10 @@ contract BufferRandomizer {
 
 	function addAcceptedNFT(address nftAddress, Tier memory tier) public onlyOwner {
 		nftToBuffTier[nftAddress] = tier;
+	}
+
+	function isAcceptedNFT(address nftAddress) public view returns (bool) {
+		return nftToBuffTier[nftAddress].tier != 0;
 	}
 
 	function getTier(address nftAddress) public view returns (Tier memory) {

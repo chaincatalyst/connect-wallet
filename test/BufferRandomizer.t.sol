@@ -5,12 +5,16 @@ import "forge-std/Test.sol";
 import "forge-std/console.sol";
 
 import "../src/BufferRandomizer.sol";
+import { MyNFT } from "./mocks/MyNFT.sol";
 
 contract BufferRandomizerTest is Test {
 
 	BufferRandomizer public bufferRandomizer;
+	MyNFT public myNFT;
 
 	address public owner = address(0x420);
+
+	event Transfer(address indexed from, address indexed to, uint256 indexed id);
 
 	function basicWeightArray() public pure returns(int16[] memory) {
 		int16[] memory buffs = new int16[](25);
@@ -43,10 +47,12 @@ contract BufferRandomizerTest is Test {
 	}
 
 	function setUp() public {
+		// deploy NFT mock
+		myNFT = new MyNFT("MyNFT", "NFT");
 		int16[] memory buffs = basicWeightArray();
 		address[] memory nftAddresses = new address[](1);
-		nftAddresses[0] = address(0x1);
-		BufferRandomizer.Tier memory tier1 = BufferRandomizer.Tier(1, 1, 20);
+		nftAddresses[0] = address(myNFT);
+		BufferRandomizer.Tier memory tier1 = BufferRandomizer.Tier(1, 5, 20);
 		BufferRandomizer.Tier[] memory tiers = new BufferRandomizer.Tier[](1);
 		tiers[0] = tier1;
 		vm.prank(owner);
@@ -149,4 +155,26 @@ contract BufferRandomizerTest is Test {
 	}
 
 
+	function testAcceptNFT() public {
+		vm.startPrank(owner);
+		myNFT.mint(owner, 1);
+		myNFT.approve(address(bufferRandomizer), 1);
+		assertEq(bufferRandomizer.isAcceptedNFT(address(myNFT)), true);
+		vm.expectEmit(true, true, true, true);
+		emit Transfer(address(bufferRandomizer), address(0), 1);
+		bufferRandomizer.getRandomBuff(10000, address(myNFT), 1);
+	}
+
+	function testRandomValueWithBuff() public {
+		// this is deterministic test, we are not changing the block conditions, we always get the same output
+		vm.warp(1 days);
+		vm.startPrank(owner);
+		myNFT.mint(owner, 1);
+		myNFT.approve(address(bufferRandomizer), 1);
+		assertEq(bufferRandomizer.isAcceptedNFT(address(myNFT)), true);
+		vm.expectEmit(true, true, true, true);
+		emit Transfer(address(bufferRandomizer), address(0), 1);
+		int256 result = bufferRandomizer.getRandomBuff(10000, address(myNFT), 1);
+		assertEq(result, 11500);
+	}
 }

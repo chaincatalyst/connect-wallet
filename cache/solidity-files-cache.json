@@ -744,8 +744,8 @@
       }
     },
     "src/BufferRandomizer.sol": {
-      "lastModificationDate": 1685029179659,
-      "contentHash": "6fdbb9705fdc9b54773239105ba92e55",
+      "lastModificationDate": 1685040696416,
+      "contentHash": "b9cc4053614a77b90a341205e1dc2ef2",
       "sourceName": "src/BufferRandomizer.sol",
       "solcConfig": {
         "settings": {
@@ -776,6 +776,7 @@
         }
       },
       "imports": [
+        "lib/forge-std/src/console.sol",
         "src/interfaces/IERC721.sol"
       ],
       "versionRequirement": "^0.8.0",
@@ -826,8 +827,8 @@
       }
     },
     "test/BufferRandomizer.t.sol": {
-      "lastModificationDate": 1685029433327,
-      "contentHash": "bf360640d1d2a2fce628be5fc49a6e2d",
+      "lastModificationDate": 1685040728827,
+      "contentHash": "a473a400e421c960e5bd75fbd9d84f74",
       "sourceName": "test/BufferRandomizer.t.sol",
       "solcConfig": {
         "settings": {
@@ -876,12 +877,99 @@
         "lib/forge-std/src/console2.sol",
         "lib/forge-std/src/interfaces/IMulticall3.sol",
         "src/BufferRandomizer.sol",
-        "src/interfaces/IERC721.sol"
+        "src/interfaces/IERC721.sol",
+        "test/mocks/ERC721.sol",
+        "test/mocks/MyNFT.sol"
       ],
       "versionRequirement": "^0.8.13",
       "artifacts": {
         "BufferRandomizerTest": {
           "0.8.19+commit.7dd6d404.Darwin.appleclang": "BufferRandomizer.t.sol/BufferRandomizerTest.json"
+        }
+      }
+    },
+    "test/mocks/ERC721.sol": {
+      "lastModificationDate": 1684580790463,
+      "contentHash": "adebe400ead8e1ddfa37ffe24fce9255",
+      "sourceName": "test/mocks/ERC721.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "metadata": {
+            "bytecodeHash": "ipfs",
+            "appendCBOR": true
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ]
+            }
+          },
+          "evmVersion": "paris",
+          "libraries": {}
+        }
+      },
+      "imports": [],
+      "versionRequirement": "^0.8.0",
+      "artifacts": {
+        "ERC721": {
+          "0.8.19+commit.7dd6d404.Darwin.appleclang": "ERC721.sol/ERC721.json"
+        },
+        "ERC721TokenReceiver": {
+          "0.8.19+commit.7dd6d404.Darwin.appleclang": "ERC721.sol/ERC721TokenReceiver.json"
+        }
+      }
+    },
+    "test/mocks/MyNFT.sol": {
+      "lastModificationDate": 1685038992324,
+      "contentHash": "3218ef7178182b645472eee841eca1e6",
+      "sourceName": "test/mocks/MyNFT.sol",
+      "solcConfig": {
+        "settings": {
+          "optimizer": {
+            "enabled": true,
+            "runs": 200
+          },
+          "metadata": {
+            "bytecodeHash": "ipfs",
+            "appendCBOR": true
+          },
+          "outputSelection": {
+            "*": {
+              "": [
+                "ast"
+              ],
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ]
+            }
+          },
+          "evmVersion": "paris",
+          "libraries": {}
+        }
+      },
+      "imports": [
+        "test/mocks/ERC721.sol"
+      ],
+      "versionRequirement": "^0.8.13",
+      "artifacts": {
+        "MyNFT": {
+          "0.8.19+commit.7dd6d404.Darwin.appleclang": "MyNFT.sol/MyNFT.json"
         }
       }
     }
