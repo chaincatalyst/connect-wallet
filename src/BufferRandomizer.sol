@@ -60,14 +60,17 @@ contract BufferRandomizer {
 	}
 
 	function removeBuffAndReplace(uint256 index) public onlyOwner {
-		if(index > availableBuffs.length) revert IndexOutOfBounds();
-		availableBuffs[index] = availableBuffs[availableBuffs.length - 1];
+		uint256 length = availableBuffs.length;
+		if(length == 0 || index >= length) revert IndexOutOfBounds();
+		availableBuffs[index] = availableBuffs[length - 1];
 		availableBuffs.pop();
 	}
 
 	function removeBuffAndShift(uint256 index) public onlyOwner {
-		if(index > availableBuffs.length) revert IndexOutOfBounds();
-		for (uint256 i = index; i < availableBuffs.length - 1; i++) {
+		uint256 length = availableBuffs.length;
+		if(length == 0 || index >= length) revert IndexOutOfBounds();
+		length = length - 1;
+		for (uint256 i = index; i < length; i++) {
 			availableBuffs[i] = availableBuffs[i + 1];
 		}
 		availableBuffs.pop();
@@ -78,7 +81,6 @@ contract BufferRandomizer {
 	}
 
 	function getBuff(uint256 index) public view returns (int16) {
-		if(index > availableBuffs.length) revert IndexOutOfBounds();
 		return availableBuffs[index];
 	}
 
@@ -105,7 +107,7 @@ contract BufferRandomizer {
 			tempBuffArray[i] = availableBuffs[i];
 		}
 
-		for (uint256 i = availableBuffsLength - 1; i < nftTier.mul; i++) {
+		for (uint256 i = availableBuffsLength - 1; i < weightLength; i++) {
 			tempBuffArray[i] = nftTier.buff;
 		}
 

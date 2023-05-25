@@ -104,7 +104,7 @@ contract BufferRandomizerTest is Test {
 		int16[] memory buffs = bufferRandomizer.getBuffs();
 		assertEq(buffs.length, 25);
 		vm.prank(owner);
-		bufferRandomizer.removeBuff(0);
+		bufferRandomizer.removeBuffAndReplace(0);
 		buffs = bufferRandomizer.getBuffs();
 		assertEq(buffs.length, 24);
 		assertEq(buffs[0], 20);
@@ -119,6 +119,33 @@ contract BufferRandomizerTest is Test {
 		assertEq(tier.tier, 3);
 		assertEq(tier.mul, 1);
 		assertEq(tier.buff, 35);
+	}
+
+	// test removal of buff one by one and test if it is removed
+	function testRemoveBuffAndShiftOneByOne() public {
+		int16[] memory buffs = bufferRandomizer.getBuffs();
+		assertEq(buffs.length, 25);
+		vm.startPrank(owner);
+		for(uint256 i = 0; i < buffs.length; i++) {
+			bufferRandomizer.removeBuffAndShift(0);
+			buffs = bufferRandomizer.getBuffs();
+			assertEq(buffs.length, 25 - i - 1);
+			for(uint256 j = 0; j < buffs.length; j++) {
+				assertEq(buffs[j], basicWeightArray()[j + i + 1]);
+			}
+		}
+	}
+
+	function testRemoveBuffAndReplaceOneByOne() public {
+		int16[] memory buffs = bufferRandomizer.getBuffs();
+		assertEq(buffs.length, 25);
+		vm.startPrank(owner);
+		for(uint256 i = 0; i < buffs.length; i++) {
+			bufferRandomizer.removeBuffAndReplace(0);
+			buffs = bufferRandomizer.getBuffs();
+			assertEq(buffs.length, 25 - i - 1);
+			assertEq(buffs[0], basicWeightArray()[basicWeightArray().length - i - 1]);
+		}
 	}
 
 
